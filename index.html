@@ -51,18 +51,57 @@
                 <div class="bg-slate-900 rounded-lg p-4 flex justify-center shadow-inner">
                     <img src="assets/arquitetura.jpeg" alt="Arquitetura Profissional AWS" class="max-w-full h-auto rounded border border-slate-700">
                 </div>
+                
                 <h3 class="text-xl font-bold mt-10 mb-4 text-slate-800">Objetivos de Aprendizagem:</h3>
-                <div class="grid md:grid-cols-2 gap-4 text-slate-600">
+                <div class="grid md:grid-cols-2 gap-4 text-slate-600 mb-8">
                     <ul class="space-y-2">
-                        <li class="flex items-center gap-2"><span class="text-orange-500">✔</span> Provisionamento de VPC e Subnets</li>
-                        <li class="flex items-center gap-2"><span class="text-orange-500">✔</span> Application Load Balancer (ALB)</li>
-                        <li class="flex items-center gap-2"><span class="text-orange-500">✔</span> Auto Scaling Group dinâmico</li>
+                        <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Provisionamento de VPC e Subnets</li>
+                        <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Application Load Balancer (ALB)</li>
+                        <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Auto Scaling Group dinâmico</li>
                     </ul>
                     <ul class="space-y-2">
-                        <li class="flex items-center gap-2"><span class="text-orange-500">✔</span> Amazon CloudFront (CDN)</li>
-                        <li class="flex items-center gap-2"><span class="text-orange-500">✔</span> Monitoramento de Metadados EC2</li>
-                        <li class="flex items-center gap-2"><span class="text-orange-500">✔</span> Testes de Stress e Failover</li>
+                        <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Amazon CloudFront (CDN)</li>
+                        <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Monitoramento de Metadados EC2</li>
+                        <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Testes de Stress e Failover</li>
                     </ul>
+                </div>
+
+                <h3 class="text-xl font-bold mt-10 mb-4 text-slate-800">Configuração de Ações Agendadas:</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-slate-200 rounded-lg overflow-hidden">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider border-b">Ação</th>
+                                <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider border-b">Configuração Esperada</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Nome da Ação</td>
+                                <td class="px-6 py-4 text-sm text-slate-600 font-mono">HAS-SA</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Capacidade desejada</td>
+                                <td class="px-6 py-4 text-sm text-slate-600 font-mono">4</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Min</td>
+                                <td class="px-6 py-4 text-sm text-slate-600 font-mono">2</td>
+                            </tr>
+                             <tr>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Max</td>
+                                <td class="px-6 py-4 text-sm text-slate-600 font-mono">5</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Recorrência (Horário Comercial do seu País)</td>
+                                <td class="px-6 py-4 text-sm text-slate-600 italic">9h - 17h, segunda a sexta-feira</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm font-medium text-slate-900">Cron Expression</td>
+                                <td class="px-6 py-4 text-sm text-slate-600 font-mono">0 9 * * MON-FRI</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -98,18 +137,20 @@
         <div id="validacao" class="tab-content max-w-2xl mx-auto">
             <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
                 <h2 class="text-2xl font-bold mb-6 text-slate-800">Validar Configurações</h2>
+                
                 <div id="error-alert" class="hidden mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-800 flex items-center gap-3">
-                    <span>⚠️</span>
-                    <p>A informação não está correta. Por favor, revise as configurações no console AWS e tente novamente.</p>
+                    <span class="text-xl">⚠️</span>
+                    <p id="error-message">A informação não está correta. Por favor, revise as configurações.</p>
                 </div>
+
                 <form class="space-y-6">
                     <div class="space-y-2">
                         <label class="text-sm font-semibold text-slate-700 uppercase">Nome do Auto Scaling Group</label>
-                        <input type="text" id="asg-input" placeholder="Lab-ASG" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all">
+                        <input type="text" id="asg-input" placeholder="Ex: APP-ASG" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all">
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-semibold text-slate-700 uppercase">Nome da Ação Programada</label>
-                        <input type="text" id="sa-input" placeholder="DIY-SA" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all">
+                        <input type="text" id="sa-input" placeholder="Ex: HAS-SA" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all">
                     </div>
                     <button type="button" onclick="validateStep()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-lg hover:bg-slate-800 transition-colors shadow-lg">
                         VERIFICAR LABORATÓRIO
@@ -141,12 +182,12 @@
             </a>
         </div>
         <p class="text-sm text-gray-400 text-center font-medium">
-            © 2025 Construindo Aplicações Web Altamente Disponíveis e Escaláveis — Criado por <span class="text-orange-400">Heberton Geovane</span>
+            © 2026 Construindo Aplicações Web Altamente Disponíveis e Escaláveis — Criado por <span class="text-orange-400">Heberton Geovane</span>
         </p>
     </footer>
 
     <script>
-        // --- LÓGICA DE NAVEGAÇÃO COM PERSISTÊNCIA ---
+        // --- NAVEGAÇÃO ---
         const tabs = document.querySelectorAll('.tab-link');
         const contents = document.querySelectorAll('.tab-content');
 
@@ -169,62 +210,79 @@
             });
         });
 
-        // --- AO CARREGAR ---
         window.addEventListener('load', () => {
             const savedTab = localStorage.getItem('activeTab');
             if (savedTab) switchTab(savedTab);
             fetchMetadata();
         });
 
-        // --- METADADOS ---
         async function fetchMetadata() {
             try {
-                // Fetch the JSON generated by our User Data script
                 const resp = await fetch('metadata.php');
                 const data = await resp.json();
-                
                 document.getElementById('instance-id').innerText = data.instance_id;
                 document.getElementById('az').innerText = data.az;
-                
                 const dot = document.getElementById('status-dot');
-                const az = data.az;
-                
-                // Dynamic dot color based on Availability Zone
-                if (az.includes('a')) {
-                    dot.className = "w-3 h-3 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]";
-                } else if (az.includes('b')) {
-                    dot.className = "w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]";
-                } else {
-                    dot.className = "w-3 h-3 rounded-full bg-purple-500 shadow-[0_0_8px_#a855f7]";
-                }
+                if (data.az.includes('a')) dot.className = "w-3 h-3 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]";
+                else if (data.az.includes('b')) dot.className = "w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]";
+                else dot.className = "w-3 h-3 rounded-full bg-purple-500 shadow-[0_0_8px_#a855f7]";
             } catch (e) {
-                console.error("Error fetching real metadata via PHP:", e);
-                // Fallback for local testing
                 document.getElementById('instance-id').innerText = "i-0ad2f43766c15c631";
                 document.getElementById('az').innerText = "us-east-1a";
                 document.getElementById('status-dot').className = "w-3 h-3 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]";
             }
         }
 
-        // --- VALIDAÇÃO ---
-        async function validateStep() {
+        // --- LÓGICA DE VALIDAÇÃO  ---
+
+        function getCountryContext() {
+            // Detecta o fuso horário do usuário (ex: America/Sao_Paulo)
+            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            
+            // Lógica simples para determinar o país ou região
+            if (timeZone.includes("Sao_Paulo") || timeZone.includes("Brasilia")) return "Brasil";
+            if (timeZone.includes("Lisboa")) return "Portugal";
+            if (timeZone.includes("UTC")) return "UTC/Global";
+            
+            return "Local"; // Fallback
+        }
+
+        function validateStep() {
             const asgIn = document.getElementById('asg-input').value.trim();
             const saIn = document.getElementById('sa-input').value.trim();
-            const err = document.getElementById('error-alert');
-            try {
-                const resp = await fetch('config_real.json');
-                const data = await resp.json();
-                if (asgIn === data.asg_real && saIn === data.sa_real) {
-                    err.classList.add('hidden');
-                    document.getElementById('modal-success').classList.add('active');
-                } else { err.classList.remove('hidden'); }
-            } catch (e) {
-                if (asgIn === "Lab-ASG" && saIn === "DIY-SA") {
-                    err.classList.add('hidden');
-                    document.getElementById('modal-success').classList.add('active');
-                } else { err.classList.remove('hidden'); }
+            const alertBox = document.getElementById('error-alert');
+            const messageText = document.getElementById('error-message');
+            const country = getCountryContext();
+
+            // Reset
+            alertBox.classList.add('hidden');
+
+            // 1. Validação do Nome do ASG
+            if (asgIn !== "APP-ASG") {
+                messageText.innerText = `O grupo de escalonamento automático chamado APP-ASG não foi encontrado no contexto do ${country}. Revise os passos de prática e tente novamente.`;
+                alertBox.classList.remove('hidden');
+                return;
             }
+
+            
+            if (saIn !== "HAS-SA") {
+                messageText.innerText = "A política de escalonamento de ações programadas, chamada HAS-SA, não pôde ser encontrada. Verifique o nome digitado.";
+                alertBox.classList.remove('hidden');
+                return;
+            }
+
+            // 3. Validação de Recorrência (Simulando validação de Cron/Horário Comercial)
+            // Aqui você pode adicionar uma lógica que verifica se o Cron informado no console 
+            // estaria correto para o fuso horário detectado.
+            const userHour = new Date().getHours();
+            
+            // Exemplo: Se o usuário tentar validar fora do horário comercial (simulação)
+            // if (userHour < 9 || userHour > 17) { ... }
+
+            // 4. Sucesso Total
+            document.getElementById('modal-success').classList.add('active');
         }
+
         function closeModal() { document.getElementById('modal-success').classList.remove('active'); }
     </script>
 </body>
