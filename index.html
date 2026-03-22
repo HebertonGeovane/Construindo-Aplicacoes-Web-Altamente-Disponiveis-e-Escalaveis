@@ -247,41 +247,35 @@
             return "Local"; // Fallback
         }
 
-        function validateStep() {
-            const asgIn = document.getElementById('asg-input').value.trim();
-            const saIn = document.getElementById('sa-input').value.trim();
-            const alertBox = document.getElementById('error-alert');
-            const messageText = document.getElementById('error-message');
-            const country = getCountryContext();
+        async function validateStep() {
+    const asgInput = document.getElementById('asg-input').value.trim();
+    const saInput = document.getElementById('sa-input').value.trim();
+    const alertBox = document.getElementById('error-alert');
+    const messageText = document.getElementById('error-message');
 
-            // Reset
-            alertBox.classList.add('hidden');
+    alertBox.classList.add('hidden');
 
-            // 1. Validação do Nome do ASG
-            if (asgIn !== "APP-ASG") {
-                messageText.innerText = `O grupo de escalonamento automático chamado APP-ASG não foi encontrado no contexto do ${country}. Revise os passos de prática e tente novamente.`;
-                alertBox.classList.remove('hidden');
-                return;
-            }
+    // 1. Busca os dados reais do PHP (que rodou o AWS CLI)
+    const resp = await fetch('metadata.php');
+    const awsData = await resp.json();
 
-            
-            if (saIn !== "HAS-SA") {
-                messageText.innerText = "A política de escalonamento de ações programadas, chamada HAS-SA, não pôde ser encontrada. Verifique o nome digitado.";
-                alertBox.classList.remove('hidden');
-                return;
-            }
+    // 2. Validação do Nome do ASG
+    if (asgInput !== "APP-ASG") {
+        messageText.innerText = "Nome do ASG incorreto.";
+        alertBox.classList.remove('hidden');
+        return;
+    }
 
-            // 3. Validação de Recorrência (Simulando validação de Cron/Horário Comercial)
-            // Aqui você pode adicionar uma lógica que verifica se o Cron informado no console 
-            // estaria correto para o fuso horário detectado.
-            const userHour = new Date().getHours();
-            
-            // Exemplo: Se o usuário tentar validar fora do horário comercial (simulação)
-            // if (userHour < 9 || userHour > 17) { ... }
+    // 3. A PROVA REAL: A ação programada existe no console da AWS?
+    if (saInput === "HAS-SA" && awsData.has_sa_verified !== true) {
+        messageText.innerText = "ERRO: A ação programada HAS-SA não foi detectada na sua conta AWS. Verifique se você criou a Scheduled Action no console com o nome exato e tente novamente.";
+        alertBox.classList.remove('hidden');
+        return;
+    }
 
-            // 4. Sucesso Total
-            document.getElementById('modal-success').classList.add('active');
-        }
+    // 4. Se passou por tudo, o aluno é fera!
+    document.getElementById('modal-success').classList.add('active');
+}
 
         function closeModal() { document.getElementById('modal-success').classList.remove('active'); }
     </script>
