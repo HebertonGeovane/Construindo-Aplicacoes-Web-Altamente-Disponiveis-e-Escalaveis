@@ -12,8 +12,10 @@
     .tab-link.active { border-bottom: 2px solid #ff9900; color: #ff9900; }
     .tab-link:not(.active) { color: #64748b; }
     .terminal-font { font-family: 'Fira Code', monospace; }
+    
     #modal-success { display: none; }
     #modal-success.active { display: flex; }
+
     @keyframes pulse-gold {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
@@ -26,9 +28,7 @@
 
   <header class="bg-slate-900 text-white p-4 flex items-center justify-between shadow-md">
     <div class="flex items-center space-x-3">
-      <svg class="w-7 h-7 fill-white" viewBox="0 0 24 24">
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-      </svg>
+      <svg class="w-7 h-7 fill-white" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       <span class="text-lg font-bold tracking-tight">Construindo Aplicações Web Altamente Disponíveis e Escaláveis</span>
     </div>
   </header>
@@ -46,55 +46,75 @@
       <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
         <h2 class="text-2xl font-bold mb-4 text-slate-800 border-b pb-2">Cenário do Desafio</h2>
         <p class="text-slate-600 leading-relaxed mb-8">
-          Bem-vindo ao desafio prático! Nesta atividade, você construirá uma infraestrutura resiliente na AWS. O foco é garantir que a aplicação suporte falhas e picos de tráfego automaticamente.
+          Bem-vindo ao desafio prático! Nesta atividade, você construirá e implantará uma infraestrutura resiliente na AWS. O foco é garantir que a aplicação suporte falhas de instâncias e picos de tráfego automaticamente.
         </p>
+        <div class="bg-slate-900 rounded-lg p-4 flex justify-center shadow-inner">
+          <img src="assets/arquitetura.jpeg" alt="Arquitetura Profissional AWS" class="max-w-full h-auto rounded border border-slate-700">
+        </div>
         
-        <h3 class="text-xl font-bold mb-4 text-slate-800">Objetivos de Aprendizagem:</h3>
+        <h3 class="text-xl font-bold mt-10 mb-4 text-slate-800">Objetivos de Aprendizagem:</h3>
         <div class="grid md:grid-cols-2 gap-4 text-slate-600 mb-8">
           <ul class="space-y-2">
             <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Provisionamento de VPC e Subnets</li>
             <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Application Load Balancer (ALB)</li>
-            <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Auto Scaling Group (APP-ASG)</li>
+            <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Auto Scaling Group dinâmico</li>
           </ul>
           <ul class="space-y-2">
             <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Amazon CloudFront (CDN)</li>
             <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Monitoramento de Metadados EC2</li>
-            <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Ações Programadas (HAS-SA)</li>
+            <li class="flex items-center gap-2"><span class="text-orange-500 font-bold">✔</span> Testes de Stress e Failover</li>
           </ul>
         </div>
 
-        <h3 class="text-xl font-bold mb-4 text-slate-800">Configuração de Ações Agendadas:</h3>
-        <table class="min-w-full border border-slate-200 rounded-lg overflow-hidden">
-          <tbody class="divide-y divide-slate-200 text-sm">
-            <tr>
-              <td class="px-6 py-4 font-bold bg-slate-50 w-1/3">Nome da Ação:</td>
-              <td class="px-6 py-4 font-mono text-orange-600">HAS-SA</td>
-            </tr>
-            <tr>
-              <td class="px-6 py-4 font-bold bg-slate-50">Recorrência:</td>
-              <td class="px-6 py-4 italic text-slate-600">9h - 17h (Segunda a Sexta)</td>
-            </tr>
-          </tbody>
-        </table>
+        <h3 class="text-xl font-bold mt-10 mb-4 text-slate-800">Configuração de Ações Agendadas:</h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white border border-slate-200 rounded-lg overflow-hidden">
+            <tbody class="divide-y divide-slate-200 text-sm">
+              <tr>
+                <td class="px-6 py-4 font-bold bg-slate-50 w-1/3 text-slate-700">Nome da Ação:</td>
+                <td class="px-6 py-4 font-mono text-orange-600 font-bold">HAS-SA</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 font-bold bg-slate-50 text-slate-700">Capacidade Desejada/MIN/MAX:</td>
+                <td class="px-6 py-4 italic text-slate-600">4/2/5</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 font-bold bg-slate-50 text-slate-700">Recorrência:</td>
+                <td class="px-6 py-4 italic text-slate-600">CRON   0 9 ** MON-FRI</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 font-bold bg-slate-50 text-slate-700">Fuso Horário:</td>
+                <td class="px-6 py-4 italic text-slate-600">Seu País Exemplo: América/Sao_Paulo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <div id="dashboard" class="tab-content space-y-6 max-w-5xl mx-auto">
-      <div class="bg-black rounded-lg shadow-2xl border border-slate-800 overflow-hidden terminal-font p-8">
-        <div class="text-green-400 space-y-4">
-          <h1 class="text-xl md:text-2xl font-bold text-white mb-6">Demonstração de Alta Disponibilidade</h1>
-          <div class="space-y-3 bg-slate-900/50 p-6 rounded-md border border-slate-800">
-            <p class="flex items-center gap-3">
-              <span class="text-slate-500">$</span> 
-              <span class="text-blue-400 font-bold">INSTANCE_ID:</span> 
-              <span id="instance-id" class="text-white">Carregando...</span>
-            </p>
-            <p class="flex items-center gap-3">
-              <span class="text-slate-500">$</span> 
-              <span class="text-blue-400 font-bold">AVAILABILITY_ZONE:</span> 
-              <span id="az" class="text-white">Carregando...</span>
-              <span id="status-dot" class="w-3 h-3 rounded-full bg-slate-600"></span>
-            </p>
+      <div class="bg-black rounded-lg shadow-2xl border border-slate-800 overflow-hidden terminal-font">
+        <div class="bg-slate-800 px-4 py-3 flex items-center justify-between border-b border-slate-700 text-xs text-slate-400">
+          <span class="font-mono">ssh -i lab-key.pem ec2-user@aws-instance</span>
+          <span class="text-green-500 font-bold tracking-widest uppercase">Connected</span>
+        </div>
+        <div class="p-8 flex flex-col md:flex-row items-center gap-10">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/AWS_Simple_Icons_Compute_Amazon_EC2_Instances.svg" class="w-32 h-32 opacity-90 p-3 bg-white/5 rounded-lg border border-white/10" alt="EC2 Icon">
+          <div class="text-green-400 space-y-4">
+            <h1 class="text-xl md:text-2xl font-bold text-white mb-6">Demonstração de Alta Disponibilidade</h1>
+            <div class="space-y-3 bg-slate-900/50 p-6 rounded-md border border-slate-800">
+              <p class="flex items-center gap-3">
+                <span class="text-slate-500">$</span> 
+                <span class="text-blue-400 font-bold">INSTANCE_ID:</span> 
+                <span id="instance-id" class="text-white">Carregando...</span>
+              </p>
+              <p class="flex items-center gap-3">
+                <span class="text-slate-500">$</span> 
+                <span class="text-blue-400 font-bold">AVAILABILITY_ZONE:</span> 
+                <span id="az" class="text-white">Carregando...</span>
+                <span id="status-dot" class="w-3 h-3 rounded-full bg-slate-600 transition-all duration-500"></span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -104,16 +124,16 @@
       <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
         <h2 class="text-2xl font-bold mb-6 text-slate-800">Validar Configurações</h2>
         <div id="error-alert" class="hidden mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-800">
-          <p id="error-message"></p>
+          <p id="error-message" class="flex items-center gap-2"><span>⚠️</span> <span>Erro de validação.</span></p>
         </div>
         <form class="space-y-6">
-          <div>
+          <div class="space-y-2">
             <label class="text-sm font-semibold text-slate-700 uppercase">Nome do Auto Scaling Group</label>
-            <input type="text" id="asg-input" placeholder="Ex: APP-ASG" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            <input type="text" id="asg-input" placeholder="Ex: APP-ASG" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all">
           </div>
-          <div>
+          <div class="space-y-2">
             <label class="text-sm font-semibold text-slate-700 uppercase">Nome da Ação Programada</label>
-            <input type="text" id="sa-input" placeholder="Ex: HAS-SA" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+            <input type="text" id="sa-input" placeholder="Ex: HAS-SA" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none transition-all">
           </div>
           <button type="button" onclick="validateStep()" class="w-full bg-slate-900 text-white font-bold py-4 rounded-lg hover:bg-slate-800 shadow-lg transition-all">
             VERIFICAR LABORATÓRIO
@@ -124,35 +144,44 @@
   </main>
 
   <div id="modal-success" class="fixed inset-0 z-50 bg-slate-900/90 items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl relative">
       <div class="text-6xl mb-4 emoji-animate">🌟🏆🎉🏆🌟</div>
       <h2 class="text-3xl font-black text-slate-900 mb-4">Congratulações!</h2>
       <p class="text-slate-600 mb-6 leading-relaxed">
-        Você concluiu o desafio com sucesso na infraestrutura real da AWS!
+        Você concluiu o desafio <strong>Construindo Aplicações Web Altamente Disponíveis e Escaláveis</strong> com sucesso!
       </p>
-      <p class="text-orange-600 font-bold text-xl mb-8 animate-bounce">Próximo nível: Cloud Engineer 🚀</p>
-      <button onclick="location.reload()" class="w-full bg-slate-900 text-white font-bold py-3 rounded-lg">FINALIZAR</button>
+      <p class="text-orange-600 font-bold text-xl mb-8 animate-bounce">Vamos para o Próximo nível! 🚀</p>
+      <button onclick="closeModal()" class="w-full bg-slate-900 text-white font-bold py-3 rounded-lg">CONTINUAR</button>
     </div>
   </div>
 
-  <footer class="bg-slate-900 py-8 px-6 text-center border-t border-slate-700 mt-auto">
-    <p class="text-sm text-gray-400">© 2026 - Criado por <span class="text-orange-400">Heberton Geovane</span></p>
+  <footer class="bg-slate-900 py-8 px-6 flex flex-col items-center gap-6 border-t border-slate-700 mt-auto">
+    <div class="flex gap-8 text-3xl">
+      <a href="https://github.com/HebertonGeovane" target="_blank" class="transition transform hover:scale-125">
+        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub" class="w-10 h-10 invert hover:opacity-80" />
+      </a>
+      <a href="https://linkedin.com/in/heberton-geovane" target="_blank" class="transition transform hover:scale-125">
+        <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" class="w-10 h-10 hover:opacity-80" />
+      </a>
+    </div>
+    <p class="text-sm text-gray-400 text-center font-medium">
+      © 2026 Construindo Aplicações Web Altamente Disponíveis e Escaláveis — Criado por <span class="text-orange-400">Heberton Geovane</span>
+    </p>
   </footer>
 
   <script>
-    // --- LÓGICA DE NAVEGAÇÃO ---
-    const tabs = document.querySelectorAll('.tab-link');
-    const contents = document.querySelectorAll('.tab-content');
-
-    function switchTab(targetTabId) {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === targetTabId));
-      contents.forEach(c => c.classList.toggle('active', c.id === targetTabId));
+    // --- NAVEGAÇÃO ---
+    function switchTab(id) {
+      document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelector(`[data-tab="${id}"]`).classList.add('active');
+      document.getElementById(id).classList.add('active');
+      localStorage.setItem('activeTab', id);
     }
 
-    tabs.forEach(tab => tab.addEventListener('click', (e) => {
-      e.preventDefault();
-      switchTab(tab.dataset.tab);
-    }));
+    document.querySelectorAll('.tab-link').forEach(tab => {
+      tab.addEventListener('click', e => { e.preventDefault(); switchTab(tab.dataset.tab); });
+    });
 
     // --- METADADOS ---
     async function fetchMetadata() {
@@ -168,43 +197,46 @@
       }
     }
 
-    // --- VALIDAÇÃO REAL ---
+    // --- VALIDAÇÃO BLINDADA (REAL) ---
     async function validateStep() {
       const asgIn = document.getElementById('asg-input').value.trim();
       const saIn = document.getElementById('sa-input').value.trim();
       const alertBox = document.getElementById('error-alert');
       const messageText = document.getElementById('error-message');
-
       alertBox.classList.add('hidden');
 
       try {
         const resp = await fetch('config_real.json');
-        if (!resp.ok) throw new Error("Gabarito não encontrado");
+        if (!resp.ok) throw new Error();
         const awsData = await resp.json();
 
-        // Verifica ASG
+        // 1. Valida nome do ASG contra o recurso real
         if (asgIn !== awsData.asg_real) {
-          messageText.innerText = `O grupo '${asgIn}' não corresponde ao recurso real detectado.`;
+          messageText.innerHTML = `<span>⚠️</span> O grupo de escalonamento automático chamado <b>${asgIn}</b> não foi encontrado. Revise os passos de prática e tente novamente.`;
           alertBox.classList.remove('hidden');
           return;
         }
 
-        // Verifica Ação Programada Real na AWS
+        // 2. Valida se a Ação Programada existe de verdade no console AWS
         if (saIn !== "HAS-SA" || awsData.sa_real !== "HAS-SA") {
-          messageText.innerText = "A política 'HAS-SA' não foi encontrada no console AWS ou o nome está incorreto.";
+          messageText.innerHTML = `<span>⚠️</span> A política de escalonamento de ações programadas <b>HAS-SA</b> não foi encontrada na sua infraestrutura real.`;
           alertBox.classList.remove('hidden');
           return;
         }
 
         document.getElementById('modal-success').classList.add('active');
-
       } catch (e) {
-        messageText.innerText = "ERRO: Infraestrutura não detectada. Use o Load Balancer e o script User Data correto.";
+        messageText.innerHTML = `<span>⚠️</span> <b>ERRO CRÍTICO:</b> Não detectamos metadados reais da AWS. Use o ALB e o script User Data correto.`;
         alertBox.classList.remove('hidden');
       }
     }
 
-    window.onload = fetchMetadata;
+    window.onload = () => {
+      const saved = localStorage.getItem('activeTab');
+      if (saved) switchTab(saved);
+      fetchMetadata();
+    };
+    function closeModal() { document.getElementById('modal-success').classList.remove('active'); }
   </script>
 </body>
 </html>
