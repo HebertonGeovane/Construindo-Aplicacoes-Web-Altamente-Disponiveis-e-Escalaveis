@@ -2,6 +2,28 @@
 yum update -y
 yum install -y httpd php jq aws-cli
 
+# ================================
+# 1. METADATA (EC2 INFO)
+# ================================
+cat <<'EOF' > /var/www/html/metadata.php
+<?php
+header('Content-Type: application/json');
+
+$token = shell_exec('curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"');
+
+$instance_id = trim(shell_exec("curl -s -H 'X-aws-ec2-metadata-token: $token' http://169.254.169.254/latest/meta-data/instance-id"));
+$az = trim(shell_exec("curl -s -H 'X-aws-ec2-metadata-token: $token' http://169.254.169.254/latest/meta-data/placement/availability-zone"));
+
+echo json_encode([
+  "instance_id" => $instance_id,
+  "az" => $az
+]);
+?>
+EOF
+
+# ================================
+# 2. VALIDATION (REAL AWS)
+# ================================
 cat <<'EOF' > /var/www/html/validate.php
 <?php
 header('Content-Type: application/json');
@@ -24,7 +46,7 @@ aws ec2 describe-instances \
 // ===== SCHEDULED ACTIONS =====
 $raw = shell_exec("
 aws autoscaling describe-scheduled-actions \
---auto-scaling-group-name "$asg_real" \
+--auto-scaling-group-name \"$asg_real\" \
 --region $region \
 --output json
 ");
@@ -57,3 +79,20 @@ echo json_encode([
 ]);
 ?>
 EOF
+
+# ================================
+# 3. BAIXAR FRONTEND DO GITHUB
+# ================================
+cd /var/www/html
+
+wget https://raw.githubusercontent.com/HebertonGeovane/Construindo-Aplicacoes-Web-Altamente-Disponiveis-e-Escalaveis/main/index.html -O index.html
+
+mkdir -p assets
+wget https://raw.githubusercontent.com/HebertonGeovane/Construindo-Aplicacoes-Web-Altamente-Disponiveis-e-Escalaveis/main/assets/arquitetura.jpeg -O assets/arquitetura.jpeg
+
+# ================================
+# 4. PERMISSÕES + APACHE
+# ================================
+chown -R apache:apache /var/www/html
+systemctl start httpd
+systemctl enable httpd
