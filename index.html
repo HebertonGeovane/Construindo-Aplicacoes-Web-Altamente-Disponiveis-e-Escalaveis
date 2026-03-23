@@ -169,74 +169,99 @@
     </p>
   </footer>
 
-  <script>
-    // --- NAVEGAÇÃO ---
-    function switchTab(id) {
-      document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelector(`[data-tab="${id}"]`).classList.add('active');
-      document.getElementById(id).classList.add('active');
-      localStorage.setItem('activeTab', id);
-    }
+<script>
+  // --- NAVEGAÇÃO ---
+  function switchTab(id) {
+    document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelector(`[data-tab="${id}"]`).classList.add('active');
+    document.getElementById(id).classList.add('active');
+    localStorage.setItem('activeTab', id);
+  }
 
-    document.querySelectorAll('.tab-link').forEach(tab => {
-      tab.addEventListener('click', e => { e.preventDefault(); switchTab(tab.dataset.tab); });
+  document.querySelectorAll('.tab-link').forEach(tab => {
+    tab.addEventListener('click', e => {
+      e.preventDefault();
+      switchTab(tab.dataset.tab);
     });
+  });
 
-    // --- METADADOS ---
-    async function fetchMetadata() {
-      try {
-        const resp = await fetch('metadata.php');
-        const data = await resp.json();
-        document.getElementById('instance-id').innerText = data.instance_id;
-        document.getElementById('az').innerText = data.az;
-        const dot = document.getElementById('status-dot');
-        dot.className = `w-3 h-3 rounded-full ${data.az.includes('a') ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-blue-500 shadow-[0_0_8px_#3b82f6]'}`;
-      } catch (e) {
-        document.getElementById('instance-id').innerText = "Ambiente Offline";
-      }
+  // --- METADADOS ---
+  async function fetchMetadata() {
+    try {
+      const resp = await fetch('metadata.php');
+      const data = await resp.json();
+
+      document.getElementById('instance-id').innerText = data.instance_id;
+      document.getElementById('az').innerText = data.az;
+
+      const dot = document.getElementById('status-dot');
+      dot.className = `w-3 h-3 rounded-full ${
+        data.az.includes('a')
+          ? 'bg-green-500 shadow-[0_0_8px_#22c55e]'
+          : 'bg-blue-500 shadow-[0_0_8px_#3b82f6]'
+      }`;
+    } catch (e) {
+      document.getElementById('instance-id').innerText = "Ambiente Offline";
     }
+  }
 
-    // --- VALIDAÇÃO BLINDADA (REAL) ---
-    async function validateStep() {
-      const asgIn = document.getElementById('asg-input').value.trim();
-      const saIn = document.getElementById('sa-input').value.trim();
-      const alertBox = document.getElementById('error-alert');
-      const messageText = document.getElementById('error-message');
-      alertBox.classList.add('hidden');
+  // --- VALIDAÇÃO REAL AWS ---
+  async function validateStep() {
+    const asgIn = document.getElementById('asg-input').value.trim();
+    const saIn = document.getElementById('sa-input').value.trim();
 
-      try {
-        const resp = await fetch('config_real.json');
-        if (!resp.ok) throw new Error();
-        const awsData = await resp.json();
+    const alertBox = document.getElementById('error-alert');
+    const messageText = document.getElementById('error-message');
 
-        // 1. Valida nome do ASG contra o recurso real
-        if (asgIn !== awsData.asg_real) {
-          messageText.innerHTML = `<span>⚠️</span> O grupo de escalonamento automático chamado <b>${asgIn}</b> não foi encontrado. Revise os passos de prática e tente novamente.`;
-          alertBox.classList.remove('hidden');
-          return;
-        }
+    alertBox.classList.add('hidden');
 
-        // 2. Valida se a Ação Programada existe de verdade no console AWS
-        if (saIn !== "HAS-SA" || awsData.sa_real !== "HAS-SA") {
-          messageText.innerHTML = `<span>⚠️</span> A política de escalonamento de ações programadas <b>HAS-SA</b> não foi encontrada na sua infraestrutura real.`;
-          alertBox.classList.remove('hidden');
-          return;
-        }
+    try {
+      const resp = await fetch('validate.php');
+      if (!resp.ok) throw new Error();
 
-        document.getElementById('modal-success').classList.add('active');
-      } catch (e) {
-        messageText.innerHTML = `<span>⚠️</span> <b>ERRO CRÍTICO:</b> Não detectamos metadados reais da AWS. Use o ALB e o script User Data correto.`;
+      const data = await resp.json();
+
+      // 1. Validar ASG
+      if (asgIn !== data.asg_real) {
+        messageText.innerHTML = `⚠️ O Auto Scaling Group <b>${asgIn}</b> não foi encontrado.`;
         alertBox.classList.remove('hidden');
+        return;
       }
-    }
 
-    window.onload = () => {
-      const saved = localStorage.getItem('activeTab');
-      if (saved) switchTab(saved);
-      fetchMetadata();
-    };
-    function closeModal() { document.getElementById('modal-success').classList.remove('active'); }
-  </script>
+      // 2. Validar Scheduled Action
+      if (!data.sa_found || saIn !== "HAS-SA") {
+        messageText.innerHTML = `⚠️ A ação programada <b>HAS-SA</b> não foi encontrada.`;
+        alertBox.classList.remove('hidden');
+        return;
+      }
+
+      // 3. Validar horário comercial
+      if (!data.cron_ok) {
+        messageText.innerHTML = `⚠️ A recorrência não está correta (9h–17h, segunda a sexta).`;
+        alertBox.classList.remove('hidden');
+        return;
+      }
+
+      // SUCESSO
+      document.getElementById('modal-success').classList.add('active');
+
+    } catch (e) {
+      messageText.innerHTML = `⚠️ ERRO: Não foi possível validar com a AWS.`;
+      alertBox.classList.remove('hidden');
+    }
+  }
+
+  window.onload = () => {
+    const saved = localStorage.getItem('activeTab');
+    if (saved) switchTab(saved);
+    fetchMetadata();
+  };
+
+  function closeModal() {
+    document.getElementById('modal-success').classList.remove('active');
+  }
+</script>
+  
 </body>
 </html>
