@@ -81,7 +81,7 @@ Configure o molde das instâncias:
 ### 5️⃣ Scheduled Action (Ação Programada)
 Crie uma ação agendada no ASG para simular o horário comercial:
 * **Nome:** `HAS-SA`
-* **Recorrência (Cron):** `0 9 * * MON-FRI` (Início às 9h de Seg a Sex).
+* **Recorrência (Cron):** `0 9-17 * * MON-FRI` (Início às 9h de Seg a Sex).
 
 ### 6️⃣ CloudFront (CDN)
 * **Origin:** DNS do `APP-ALB`.
